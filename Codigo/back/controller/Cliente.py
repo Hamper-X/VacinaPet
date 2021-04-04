@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from model.cliente import Cliente as ClienteModel
+from model.Cliente import Cliente as ClienteModel
 from service.database import db
 
 parser = reqparse.RequestParser()
@@ -10,7 +10,12 @@ class Cliente(Resource):
   # cadastro
   def post(self):
     args = parser.parse_args()
-    novo_cliente = ClienteModel(args['nome'], args['email'], args['senha'])
-    db.session.add(novo_cliente)
-    db.session.commit()
+    try:
+      novo_cliente = ClienteModel(args['nome'], args['email'], args['senha'])
+      db.session.add(novo_cliente)
+      db.session.commit()
+    except Exception as e:
+      print(e)
+      return {'erro': 'Algo deu errado. Favor referir ao log do sistema'}
+
     return {'msg': 'Novo usuário adicionado'}

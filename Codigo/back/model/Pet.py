@@ -1,4 +1,7 @@
 from service.database import db
+from model.Clinica import Clinica
+from model.Medicamento import Medicamento
+from model.Vacina import Vacina
 
 class Pet(db.Model):
   id = db.Column(db.Integer, primary_key = True)
@@ -10,9 +13,9 @@ class Pet(db.Model):
   nascimento  = db.Column(db.DateTime)
   raca  = db.Column(db.String(32))
   cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
-  historico = db.Relationship('Clinica', backref='pet', lazy=True)
-  medicamento = db.Relationship('Medicamento', backref='pet', lazy=True) 
-  vacina  = db.Relationship('Vacina', backref='pet', lazy=True)
+  historico = db.relationship('Clinica', backref='pet', lazy=True)
+  medicamento = db.relationship('Medicamento', backref='pet', lazy=True) 
+  vacina  = db.relationship('Vacina', backref='pet', lazy=True)
 
   def __init__(self, nome, especie, peso, sexo, porte, nascimento, raca, cliente_id):
     self.nome = nome
