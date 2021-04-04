@@ -10,9 +10,9 @@ class Pet(db.Model):
   nascimento  = db.Column(db.DateTime)
   raca  = db.Column(db.String(32))
   cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
-  historico = db.Relationship('Clinica', backred='pet', lazy=True)
-  medicamento = db.Relationship('Medicamento', backred='pet', lazy=True) 
-  vacina  = db.Relationship('Vacina', backred='pet', lazy=True)
+  historico = db.Relationship('Clinica', backref='pet', lazy=True)
+  medicamento = db.Relationship('Medicamento', backref='pet', lazy=True) 
+  vacina  = db.Relationship('Vacina', backref='pet', lazy=True)
 
   def __init__(self, nome, especie, peso, sexo, porte, nascimento, raca, cliente_id):
     self.nome = nome
