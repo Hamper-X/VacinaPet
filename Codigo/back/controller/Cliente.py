@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from model.Cliente import Cliente as ClienteModel
+from model.cliente import Cliente as ClienteModel
 from service.database import db
 
 parser = reqparse.RequestParser()

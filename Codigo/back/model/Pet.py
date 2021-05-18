@@ -2,6 +2,7 @@ from service.database import db
 from model.Clinica import Clinica
 from model.Medicamento import Medicamento
 from model.Vacina import Vacina
+from flask_sqlalchemy import BaseQuery
 
 class Pet(db.Model):
   id = db.Column(db.Integer, primary_key = True)
@@ -26,3 +27,10 @@ class Pet(db.Model):
     self.nascimento = nascimento
     self.raca = raca
     self.cliente_id = cliente_id
+
+  def __repr__(self):
+    return '<Pet>'
+
+  def add(self):
+    db.session.add(self)
+    db.session.commit()
