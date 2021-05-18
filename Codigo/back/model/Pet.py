@@ -7,6 +7,8 @@ from flask_sqlalchemy import BaseQuery
 class PetMethods(BaseQuery):
   def getByClienteId(self, clienteId):
     return self.filter_by(cliente_id = clienteId).all()
+  def getById(self, id):
+    return self.filter_by(id = id).first()
 
 class Pet(db.Model):
   query_class = PetMethods

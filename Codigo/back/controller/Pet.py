@@ -19,12 +19,12 @@ class Pet(Resource):
 
     except Exception as e:
       print(e)
-      return {"error": "Deu problema, olha no log"}
+      return {"error": "Deu problema, olha no log"}, 400
 
-    return {"msg": "{} adicionado na conta de {}".format(args['nome'], current_identity.email)}
+    return {"msg": "{} adicionado na conta de {}".format(args['nome'], current_identity.email)}, 200
 
   @jwt_required()
   def get(self):
     
     response = PetModel.query.getByClienteId(current_identity.id)
-    return [i.serialize for i in response]
+    return [i.serialize for i in response], 200

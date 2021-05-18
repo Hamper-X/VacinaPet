@@ -14,3 +14,21 @@ class Clinica(db.Model):
     self.sintomas = sintomas
     self.prescricao = prescricao
     self.pet_id = pet_id
+
+  def __repr__(self):
+      return '<Clinica>'
+
+  @property
+  def serialize(self):
+    return {
+      'id': self.id,
+      'nome': self.nome,
+      'veterinario': self.veterinario,
+      'sintomas': self.sintomas,
+      'prescricao': self.prescricao,
+      'pet_id': self.pet_id
+    }
+
+  def add(self):
+    db.session.add(self)
+    db.session.commit()
