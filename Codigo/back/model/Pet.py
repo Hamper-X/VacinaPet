@@ -4,7 +4,12 @@ from model.Medicamento import Medicamento
 from model.Vacina import Vacina
 from flask_sqlalchemy import BaseQuery
 
+class PetMethods(BaseQuery):
+  def getByClienteId(self, clienteId):
+    return self.filter_by(cliente_id = clienteId).all()
+
 class Pet(db.Model):
+  query_class = PetMethods
   id = db.Column(db.Integer, primary_key = True)
   nome = db.Column(db.String(64))
   especie = db.Column(db.String(64))
@@ -30,6 +35,19 @@ class Pet(db.Model):
 
   def __repr__(self):
     return '<Pet>'
+
+  @property
+  def serialize(self):
+    return {
+      'id': self.id,
+      'nome': self.nome,
+      'especie': self.especie,
+      'peso': self.peso,
+      'sexo': self.sexo,
+      'porte': self.porte,
+      'nascimento': self.nascimento.strftime("%d/%m/%Y"),
+      'raca': self.raca
+    }
 
   def add(self):
     db.session.add(self)

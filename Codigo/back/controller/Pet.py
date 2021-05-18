@@ -3,7 +3,6 @@ from flask_restful import reqparse, Resource
 from flask_jwt import jwt_required, current_identity
 from model.Pet import Pet as PetModel
 from datetime import datetime
-from service.database import db
 
 parser = reqparse.RequestParser()
 for arg in ['nome', 'especie', 'peso', 'sexo', 'porte', 'nascimento', 'raca']:
@@ -24,6 +23,8 @@ class Pet(Resource):
 
     return {"msg": "{} adicionado na conta de {}".format(args['nome'], current_identity.email)}
 
-  @jwt_required
+  @jwt_required()
   def get(self):
-    return
+    
+    response = PetModel.query.getByClienteId(current_identity.id)
+    return [i.serialize for i in response]
