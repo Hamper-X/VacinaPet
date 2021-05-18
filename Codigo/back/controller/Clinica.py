@@ -20,5 +20,13 @@ class Clinica(Resource):
     newClinica.add()
     return {"msg": "novo histórico de consulta adicionado"}, 200
 
-  def get(self):
-    return
+  @jwt_required()
+  def get(self, pet_id):
+    pet = PetModel.query.getById(pet_id)
+
+    if(pet == None or pet.cliente_id != current_identity.id):
+      return {"erro": "Esse pet não pertence à você"}, 401
+
+    response = ClinicaModel.query.getByPetId(pet_id)
+
+    return [i.serialize for i in response], 200

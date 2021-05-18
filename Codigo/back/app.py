@@ -18,7 +18,7 @@ db.init_app(app)
 
 api.add_resource(Cliente, '/api/cliente')
 api.add_resource(Pet, '/api/pet')
-api.add_resource(Clinica, '/api/clinica')
+api.add_resource(Clinica, '/api/clinica', '/api/clinica/<int:pet_id>')
 
 if __name__ == '__main__':
   app.run(debug=True)

@@ -1,6 +1,12 @@
 from service.database import db
+from flask_sqlalchemy import BaseQuery
+
+class ClinicaMethods(BaseQuery):
+  def getByPetId(self, pet_id):
+    return self.filter_by(pet_id = pet_id).all()
 
 class Clinica(db.Model):
+  query_class = ClinicaMethods
   id = db.Column(db.Integer, primary_key=True)
   nome = db.Column(db.String(256))
   veterinario = db.Column(db.String(256))
