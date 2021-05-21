@@ -53,7 +53,7 @@ class Menu(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # Abrindo Imagem
-        photo = Image.open("vacpet.png")
+        photo = Image.open("login.jpg")
         # Arrumando Tamanho
         resize = photo.resize((1030,600), Image.ANTIALIAS)
         # Criando a imagem
@@ -70,13 +70,9 @@ class Menu(tk.Frame):
 
         button1 = tk.Button(self, text="Login", font= LARGEFONT, relief="solid",background="white", command=lambda : controller.show_frame(Login))
         button2 = tk.Button(self, text="Cadastrar", font= LARGEFONT, relief="solid",background="white",command =lambda : controller.show_frame(Cadastrar))
-        espaco1 = tk.Label(self,pady=100,background="white")
-        espaco2 = tk.Label(self,pady=15,background="white")
 
-        espaco1.pack()
-        button1.pack()
-        espaco2.pack()
-        button2.pack()
+        button1.place(x=500, y=250,anchor="center")
+        button2.place(x=500, y=375,anchor="center")
          
   
           
@@ -101,10 +97,6 @@ class Login(tk.Frame):
         # Centralizando
         label.place(relx=0,rely=0)
 
-        spaco= tk.Label(self,pady=65)
-        spaco.pack()
-        spaco.place()
-
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(Menu),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
 
@@ -119,13 +111,12 @@ class Login(tk.Frame):
         btn_enviar = tk.Button(self, width = 10, text="Login",command = lambda:self.ent_verification(ent_email,ent_senha), font=("Italic", 14), relief="solid",bg='white')
 
 
-        lbl_email.pack()
-        ent_email.pack()
-        lbl_senha.pack()
-        ent_senha.pack()
+        lbl_email.place(x=500, y=225,anchor="center")
+        ent_email.place(x=500, y=250,anchor="center")
+        lbl_senha.place(x=500, y=275,anchor="center")
+        ent_senha.place(x=500, y=300,anchor="center")
 
-        space.pack()
-        btn_enviar.pack()
+        btn_enviar.place(x=500, y=450,anchor="center")
 
     def ent_verification(self,email,senha):
         data = []
@@ -218,16 +209,16 @@ class Cadastrar(tk.Frame):
 
 
         if data[0] == "" or data[0]==" ":
-            lbl_Alert = tk.Label(cad, width = 30, text="ERRO! A aba de nome deve ser preenchida.", font=("Italic", 12))
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
             resp = True
-        if data[1] == "" or data[1]==" ":
-            lbl_Alert = tk.Label(cad, width = 30, text="ERRO! A aba de email deve ser preenchida.", font=("Italic", 12))
+        elif data[1] == "" or data[1]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu email não foi inserido.", font=("Italic", 13))
             resp = True
-        if data[2] == "" or data[2]==" ":
-            lbl_Alert = tk.Label(cad, width = 30, text="ERRO! A aba de senha deve ser preenchida.", font=("Italic", 12))
+        elif data[2] == "" or data[2]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, sua senha não foi inserida.", font=("Italic", 13))
             resp = True
-        if resp==False: 
-            lbl_Alert = tk.Label(cad, width = 30, text="Cadastro realizado!", font=("Italic", 14))    
+        elif resp==False: 
+            lbl_Alert = tk.Label(cad, width = 50, text="Cadastro realizado!", font=("Italic", 14))    
 
 
         space = tk.Canvas(cad, width = 40, height=10)
