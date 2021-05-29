@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from tkinter import ttk
+from tkinter import Tk, ttk
 
 LARGEFONT =("Italic", 32)
   
@@ -24,7 +24,7 @@ class tkinterApp(tk.Tk):
   
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (Menu, Login, Cadastrar):
+        for F in (Menu, Login, Cadastrar, BuscasPet):
   
             frame = F(container, self)
   
@@ -98,11 +98,12 @@ class Login(tk.Frame):
         label.place(relx=0,rely=0)
 
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(Menu),font=("Italic", 14), relief="solid",background="white")
+        btn_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(BuscasPet),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
+        btn_prosseguir.place(x=440,y=350)
 
         lbl_email = tk.Label(self, width = 20, text="email:", font=("Italic", 16))
         lbl_senha = tk.Label(self, width = 20, text="senha:", font=("Italic", 16))
-
 
         ent_email = tk.Entry(self, width = 40, relief="solid",bg='white')
         ent_senha = tk.Entry(self, width = 40, relief="solid",bg='white')
@@ -110,7 +111,7 @@ class Login(tk.Frame):
         space = tk.Canvas(self, width = 40, height=10)
         btn_enviar = tk.Button(self, width = 10, text="Login",command = lambda:self.ent_verification(ent_email,ent_senha), font=("Italic", 14), relief="solid",bg='white')
 
-
+        
         lbl_email.place(x=500, y=225,anchor="center")
         ent_email.place(x=500, y=250,anchor="center")
         lbl_senha.place(x=500, y=275,anchor="center")
@@ -118,18 +119,17 @@ class Login(tk.Frame):
 
         btn_enviar.place(x=500, y=450,anchor="center")
 
+
+
     def ent_verification(self,email,senha):
         data = []
         data.append(str(email.get()))
         data.append(str(senha.get()))
-        resp = False
-
         cad=tk.Tk()
 
         if data[0] == "" or data[0]==" ":
             lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu email não foi inserido.", font=("Italic", 13))
             btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
-            resp = True
             lbl_Alert.pack()
             btn_enviar.pack()
 
@@ -137,17 +137,13 @@ class Login(tk.Frame):
             if data[1] == "" or data[1]==" ":
                 lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, sua senha não foi inserida.", font=("Italic", 13))
                 btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
-                resp = True
                 lbl_Alert.pack()
                 btn_enviar.pack()
             else:
                 lbl_Alert = tk.Label(cad, width = 50, text="Tudo Certo, Confirme para Prosseguir", font=("Italic", 13))
                 btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
-                resp = True
                 lbl_Alert.pack()
                 btn_enviar.pack()
-
-
   
   
   
@@ -226,6 +222,24 @@ class Cadastrar(tk.Frame):
         lbl_Alert.pack()
         space.pack()
         btn_enviar.pack()
+
+
+class BuscasPet(tk.Frame):
+    def __init__(self,parent,controller):
+        tk.Frame.__init__(self, parent)
+        espaco = tk.Label(self,pady=15,bg='white')
+        btn_CadPet = tk.Button(self, width = 15, text="Cadastro Pet", font=("Italic", 32), relief="solid",bg='white')
+        btn_MostrarPet = tk.Button(self, width=15, text="Mostrar Pet",command = self.register, font=("Italic", 32), relief="solid",bg='white')
+        btn_MostrarClinica = tk.Button(self, width=15, text="Mostrar Clinicas",command = self.register, font=("Italic", 32), relief="solid",bg='white')
+
+        espaco.pack()
+        btn_CadPet.pack()
+        espaco.pack()
+        btn_MostrarPet.pack()
+        espaco.pack()
+        btn_MostrarClinica.pack()
+        espaco.pack()
+
   
   
 # Driver Code
