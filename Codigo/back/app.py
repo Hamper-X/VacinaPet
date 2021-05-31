@@ -1,3 +1,4 @@
+from controller.Medicamento import Medicamento
 from datetime import timedelta
 from flask import Flask
 from flask_jwt import JWT
@@ -19,6 +20,7 @@ db.init_app(app)
 api.add_resource(Cliente, '/api/cliente')
 api.add_resource(Pet, '/api/pet')
 api.add_resource(Clinica, '/api/clinica', '/api/clinica/<int:pet_id>')
+api.add_resource(Medicamento, '/api/medicamento', '/api/medicamento/<int:pet_id>')
 
 if __name__ == '__main__':
   app.run(debug=True)
