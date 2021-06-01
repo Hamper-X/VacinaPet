@@ -34,7 +34,7 @@ class vetPet(tk.Tk):
         self.frames = {}
   
         # Iterando por uma tupla que consiste em diferente layouts
-        for F in (Menu, Login, Cadastrar, MenuUsuario, CadastroPet, BuscarPet, BuscarClinica, Relatorio, MostrarPets):
+        for F in (Menu, Login, Cadastrar, MenuUsuario, CadastroPet, BuscarPet, BuscarClinica, Relatorio, MostrarPets, DadosPet):
             frame = F(container, self)
             
             # inicializando os frames para cada objeto
@@ -413,22 +413,23 @@ class BuscarPet(tk.Frame):
         # Centralizando
         label.place(relx=0,rely=0)
 
-
+        # Criando Botoes Label e Entrys
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         lbl_busca = tk.Label(self, width = 40, text="Nome do Animal", font=("Italic", 20))
         ent_busca = tk.Entry(self, width = 40, relief="solid",bg='white')
 
+        # Colocando no Frame
         btn_voltar.place(x=25,y=25)
         lbl_busca.place(x=185,y=100)
         ent_busca.place(x=375,y=200)
 
-        
-        pesquisa = tk.Button(self, width=15, text="Pesquisar", command = lambda:self.pesquisa(self,ent_busca,controller), font=("Italic", 16),relief="solid",background="white")
+        # Metodo para pesquisar animais e salvar nas respectivas variaveis Globais
+        pesquisa = tk.Button(self, width=15, text="Pesquisar", command = lambda:self.pesquisa(ent_busca,controller), font=("Italic", 16),relief="solid",background="white")
         pesquisa.place(x=400,y=400)
 
 
 
-    def pesquisa(self, nome):
+    def pesquisa(self, nome,controller):
         petSearch=tk.Tk()
 
         #Salvando dado dos pets
@@ -437,7 +438,7 @@ class BuscarPet(tk.Frame):
         vetPet.tokenpetjson=vetPet.tokenpet.json()
         # Debbug
         # print(vetPet.tokenpettxt)
-        # print(vetPet.tokenpetjson)
+        # print(vetPet.tokenpetjson) 
 
         nomePet=""
         nomePet=(str(nome.get()))
@@ -461,7 +462,7 @@ class BuscarPet(tk.Frame):
             if pesquisa==True:
                 lbl_Alert = tk.Label(petSearch, width = 50, text="Tudo Certo, Pressione OK e Prosseguir para continuar", font=("Italic", 13))
                 btn_enviar = tk.Button(petSearch, width = 6, text="OK",command=petSearch.destroy, font=("Italic", 10), relief="solid",bg='white')
-                bt_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:self.controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
+                bt_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(DadosPet),font=("Italic", 14), relief="solid",background="white")
                 bt_prosseguir.place(x=440,y=350)
                 lbl_Alert.pack()
                 btn_enviar.pack() 
@@ -475,7 +476,29 @@ class BuscarPet(tk.Frame):
 
         
 class DadosPet(tk.Frame):
-    pass
+    def __init__(self,parent,controller):
+        tk.Frame.__init__(self, parent)
+        #Abrindo Imagem
+        photo = Image.open("backgroundMenu.jpg")
+        # Arrumando Tamanho
+        resize = photo.resize((1030,600), Image.ANTIALIAS)
+        # Criando a imagem
+        render = ImageTk.PhotoImage(resize)
+        # Inserindo a imagem no label
+        label = ttk.Label(self, image=render)
+        # Setando imagem do label com imagem criada
+        label.image = render
+        # Colocando label no frame
+        label.pack()
+        # Centralizando
+        label.place(relx=0,rely=0)
+
+        # lbl_nome = tk.Label(self, width = 20, text="nome", font=("Italic", 16))
+        # lbl_senha = tk.Label(self, width = 20, text="senha:", font=("Italic", 16))
+
+
+        btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
+        btn_voltar.place(x=25,y=25)       
 
 class BuscarClinica(tk.Frame):
     def __init__(self,parent,controller):
@@ -492,6 +515,17 @@ class Relatorio(tk.Frame):
 
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
+        
+
+        # Busca pets do user e transfere para um json 
+        vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+        vetPet.tokenpettxt=vetPet.tokenpet.text
+        vetPet.tokenpetjson=vetPet.tokenpet.json()
+
+
+        arquivo = open("relatorio.txt", "a")
+        
+        arquivo.write(vetPet.tokenjson)
         pass
 
 class MostrarPets(tk.Frame):
