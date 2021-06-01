@@ -9,11 +9,13 @@ class vetPet(tk.Tk):
     # Global
     token=''
     tokentxt=""
-    tokenjson=''
+    tokenjson=[]
     tokenReg=''
     tokenRegtxt=""
     tokenpet=''
     tokenpettxt=""
+    tokenpetjson=[]
+    infPet=[]
      
     # __init__ funcao para claase Tkinter
     def __init__(self, *args, **kwargs):
@@ -105,13 +107,11 @@ class Login(tk.Frame):
 
         # Botoes com acao a realizar caso selecionados
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(Menu),font=("Italic", 14), relief="solid",background="white")
-        btn_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
-        btn_enviar = tk.Button(self, width = 10, text="Login",command = lambda:self.ent_verification(ent_email,ent_senha), font=("Italic", 14), relief="solid",bg='white')
+        btn_enviar = tk.Button(self, width = 10, text="Login",command = lambda:self.ent_verification(ent_email,ent_senha,controller), font=("Italic", 14), relief="solid",bg='white')
 
 
         # Colocando os botoes no Frame
         btn_voltar.place(x=25,y=25)
-        btn_prosseguir.place(x=440,y=350)
         btn_enviar.place(x=500, y=450,anchor="center")
 
 
@@ -132,7 +132,7 @@ class Login(tk.Frame):
 
 
     # Funcao de verificacao de entradas
-    def ent_verification(self,email,senha):
+    def ent_verification(self,email,senha,controller):
         # Criando uma lista com dados
         data = []
        
@@ -157,18 +157,27 @@ class Login(tk.Frame):
                 lbl_Alert.pack()
                 btn_enviar.pack()
             else:
+                erro="401"
                 vetPet.token = post("http://127.0.0.1:5000/auth",json={"username": data[0],"password": data[1]})
                 vetPet.tokentxt=vetPet.token.text
-                vetPet.tokenjson=vetPet.token.json()
-                print(vetPet.tokentxt)
-                print(vetPet.token)
-                print(vetPet.tokenjson["access_token"])
-                # pet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(token.json()["access_token"])})
-                # print(pet.text)
-                lbl_Alert = tk.Label(cad, width = 50, text="Tudo Certo, Confirme para Prosseguir", font=("Italic", 13))
-                btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
-                lbl_Alert.pack()
-                btn_enviar.pack()
+
+                if erro in vetPet.tokentxt:
+                    lbl_Alert = tk.Label(cad, width = 50, text="Erro: Dados não existentes", font=("Italic", 13))
+                    btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
+                    lbl_Alert.pack()
+                    btn_enviar.pack()
+                else:
+                    vetPet.tokenjson=vetPet.token.json()["access_token"]
+                    print(vetPet.tokentxt)
+                    print(vetPet.token)
+                    print(vetPet.tokenjson)
+                    btn_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
+                    btn_prosseguir.place(x=440,y=350)
+                    lbl_Alert = tk.Label(cad, width = 50, text="Tudo Certo, Pressione OK e Prosseguir para continuar", font=("Italic", 13))
+                    btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
+                    lbl_Alert.pack()
+                    btn_enviar.pack()
+
   
   
   
@@ -414,41 +423,59 @@ class BuscarPet(tk.Frame):
         ent_busca.place(x=375,y=200)
 
         
-        pesquisa = tk.Button(self, width=15, text="Pesquisar", command = lambda:self.pesquisa(ent_busca), font=("Italic", 16),relief="solid",background="white")
+        pesquisa = tk.Button(self, width=15, text="Pesquisar", command = lambda:self.pesquisa(self,ent_busca,controller), font=("Italic", 16),relief="solid",background="white")
         pesquisa.place(x=400,y=400)
-        
-        if():
-            vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
-            vetPet.tokenpettxt=vetPet.tokenpet.text
-            print(vetPet.tokenpettxt)
-        
-
 
 
 
     def pesquisa(self, nome):
-        #data = []
-        #data.append(str(nome.get()))
-        #resp = False
+        petSearch=tk.Tk()
 
-        #if data[0] == "" or data[0]==" ":
-        #   lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
-        #   resp = True 
-        # elif resp==False: 
-        #     tokenReg=post("http://127.0.0.1:5000/api/pet",json={"nome": data[0]})
-        #     print(tokenReg.text)
-        #     lbl_Alert = tk.Label(cad, width = 50, text="Cadastro realizado!", font=("Italic", 14))    
+        #Salvando dado dos pets
+        vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+        vetPet.tokenpettxt=vetPet.tokenpet.text
+        vetPet.tokenpetjson=vetPet.tokenpet.json()
+        # Debbug
+        # print(vetPet.tokenpettxt)
+        # print(vetPet.tokenpetjson)
 
+        nomePet=""
+        nomePet=(str(nome.get()))
 
-        # space = tk.Canvas(cad, width = 40, height=10)
-        # btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 14), relief="solid",bg='white')
-        # lbl_Alert.pack()
-        # space.pack()
-        # btn_enviar.pack()
-           
-        pass
+        pesquisa=False
         
-#class DadosPet(tk.Frame)
+        for item in vetPet.tokenpetjson:
+            if item["nome"] == nomePet:
+                vetPet.infPet=item
+                pesquisa=True
+
+        # Debbug            
+        # print(vetPet.infPet)
+
+        if nomePet == "" or nomePet==" ":
+            lbl_Alert = tk.Label(petSearch, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
+            btn_enviar = tk.Button(petSearch, width = 6, text="OK",command=petSearch.destroy, font=("Italic", 10), relief="solid",bg='white')
+            lbl_Alert.pack()
+            btn_enviar.pack()
+        else: 
+            if pesquisa==True:
+                lbl_Alert = tk.Label(petSearch, width = 50, text="Tudo Certo, Pressione OK e Prosseguir para continuar", font=("Italic", 13))
+                btn_enviar = tk.Button(petSearch, width = 6, text="OK",command=petSearch.destroy, font=("Italic", 10), relief="solid",bg='white')
+                bt_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:self.controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
+                bt_prosseguir.place(x=440,y=350)
+                lbl_Alert.pack()
+                btn_enviar.pack() 
+            else:
+                lbl_Alert = tk.Label(petSearch, width = 50, text="Ocorreu um imprevisto, esse animal não existe.", font=("Italic", 13))
+                btn_enviar = tk.Button(petSearch, width = 6, text="OK",command=petSearch.destroy, font=("Italic", 10), relief="solid",bg='white')
+                lbl_Alert.pack()
+                btn_enviar.pack()
+
+
+
+        
+class DadosPet(tk.Frame):
+    pass
 
 class BuscarClinica(tk.Frame):
     def __init__(self,parent,controller):
@@ -456,6 +483,7 @@ class BuscarClinica(tk.Frame):
 
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
+        
         pass
 
 class Relatorio(tk.Frame):
