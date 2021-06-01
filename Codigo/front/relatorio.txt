@@ -1,9 +1,22 @@
-{
-    User: Luana Lins
-    N° Pets: 2
+[
     {
-        Nome: Boby
-        idade: 3
-        
-    } 
-}PassPassPass
+        "id": 6,
+        "nome": "Lulu",
+        "especie": "Cachorro",
+        "peso": 4.0,
+        "sexo": "M",
+        "porte": "Pequeno",
+        "nascimento": "02/02/2000",
+        "raca": "Maltes"
+    },
+    {
+        "id": 7,
+        "nome": "Lolo",
+        "especie": "Cachorro",
+        "peso": 4.5,
+        "sexo": "M",
+        "porte": "Pequeno",
+        "nascimento": "03/03/2000",
+        "raca": "Pequines"
+    }
+]

@@ -2,8 +2,24 @@ import tkinter as tk
 from requests import post,get
 from PIL import Image, ImageTk
 from tkinter import PhotoImage, Tk, ttk
+import json 
 
 LARGEFONT =("Italic", 32)
+
+def popular(self):
+        # vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+        # vetPet.tokenpettxt=vetPet.tokenpet.text
+        # vetPet.tokenpetjson=vetPet.tokenpet.json()
+        #     if not vetPet.tokenpetjson==[]:
+        #     try:
+        #         
+        # else:
+        #     cad=tk.Tk()
+        #     lbl_Alert = tk.Label(cad, width = 50, text="Não ha pets para mostrar", font=("Italic", 13))
+        #     btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
+        #     lbl_Alert.pack()
+        #     btn_enviar.pack()
+    pass
 
 class vetPet(tk.Tk):
     # Global
@@ -310,6 +326,21 @@ class CadastroPet(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent)
         
+        #Abrindo Imagem
+        photo = Image.open("backgroundMenu.jpg")
+        # Arrumando Tamanho
+        resize = photo.resize((1030,600), Image.ANTIALIAS)
+        # Criando a imagem
+        render = ImageTk.PhotoImage(resize)
+        # Inserindo a imagem no label
+        label = ttk.Label(self, image=render)
+        # Setando imagem do label com imagem criada
+        label.image = render
+        # Colocando label no frame
+        label.pack()
+        # Centralizando
+        label.place(relx=0,rely=0)
+
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
 
@@ -329,7 +360,7 @@ class CadastroPet(tk.Frame):
         ent_nascimento = tk.Entry(self, width = 40, relief="solid",bg='white')
         ent_raca = tk.Entry(self, width = 40, relief="solid",bg='white')
         
-        cad = tk.Button(self, width=15, text="Cadastrar", command = lambda:self.cadastra(ent_nome, ent_especie, ent_peso, ent_sexo,ent_porte,ent_nascimento,ent_raca), font=("Italic", 16))
+        cad = tk.Button(self, width=15, text="Cadastrar", command = lambda:self.cadastra(ent_nome, ent_especie, ent_peso, ent_sexo,ent_porte,ent_nascimento,ent_raca), font=("Italic", 16), relief="solid",bg='white')
 
         lbl_nome.pack()
         ent_nome.pack()
@@ -345,54 +376,144 @@ class CadastroPet(tk.Frame):
         ent_nascimento.pack()
         lbl_raca.pack()
         ent_raca.pack()
-        cad.pack()
+        cad.place(x=400,y=475)
 
 
     def cadastra(self, nome, especie, peso, sexo, porte, nascimento, raca):
-        pass
-        # data = [] 
-        # data.append(str(nome.get()))
-        # data.append(str(especie()))
-        # data.append(str(peso.get()))
-        # data.append(str(sexo.get()))
-        # data.append(str(porte.get()))
-        # data.append(str(nascimento.get()))
-        # data.append(str(raca.get()))
-        # resp = False
+        data = [] 
+        data.append(str(nome.get()))
+        data.append(str(especie.get()))
+        data.append(str(peso.get()))
+        data.append(str(sexo.get()))
+        data.append(str(porte.get()))
+        data.append(str(nascimento.get()))
+        data.append(str(raca.get()))
+        resp = False
 
-        # if data[0] == "" or data[0]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
-        #     resp = True
-        # elif data[1] == "" or data[1]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, especie não foi inserida.", font=("Italic", 13))
-        #     resp = True
-        # elif data[2] == "" or data[2]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, peso não foi inserido.", font=("Italic", 13))
-        #     resp = True
-        # elif data[3] == "" or data[3]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, sexo não foi inserido.", font=("Italic", 13))
-        #     resp = True
-        # elif data[4] == "" or data[4]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, porte não foi inserido.", font=("Italic", 13))
-        #     resp = True
-        # elif data[5] == "" or data[5]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, data de nascimento não foi inserida.", font=("Italic", 13))
-        #     resp = True
-        # elif data[6] == "" or data[6]==" ":
-        #     lbl_Alert = tk.Label(self, width = 50, text="Ocorreu um imprevisto, raça não foi inserida.", font=("Italic", 13))
-        #     resp = True
-        # elif resp==False: 
-        #     tokenReg=post("http://127.0.0.1:5000/api/pet",json={"nome": data[0],"especie": data[1],"peso":data[2], "sexo":data[3], "porte":data[4],"nascimento":data[5],"raca":data[6],"cliente_id":NAOTENHO})
-        #     print(tokenReg.text)
-        #     lbl_Alert = tk.Label(self, width = 50, text="Cadastro realizado!", font=("Italic", 14))    
+        cad=tk.Tk()
+
+        if data[0] == "" or data[0]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[1] == "" or data[1]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, especie não foi inserida.", font=("Italic", 13))
+            resp = True
+        elif data[2] == "" or data[2]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, peso não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[3] == "" or data[3]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, sexo não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[4] == "" or data[4]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, porte não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[5] == "" or data[5]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, data de nascimento não foi inserida.", font=("Italic", 13))
+            resp = True
+        elif data[6] == "" or data[6]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, raça não foi inserida.", font=("Italic", 13))
+            resp = True
+        elif resp==False: 
+            tokenReg=post("http://127.0.0.1:5000/api/pet",json={"nome": data[0],"especie": data[1],"peso":data[2], "sexo":data[3], "porte":data[4],"nascimento":data[5],"raca":data[6]}, headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+            print(tokenReg.text)
+            lbl_Alert = tk.Label(cad, width = 50, text="Cadastro realizado!", font=("Italic", 14))    
 
 
-        # space = tk.Canvas(self, width = 40, height=10)
-        # btn_enviar = tk.Button(self, width = 6, text="OK",command=cad.destroy, font=("Italic", 14), relief="solid",bg='white')
-        # lbl_Alert.pack()
-        # space.pack()
-        # btn_enviar.pack()
+        space = tk.Canvas(self, width = 40, height=10)
+        btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 14), relief="solid",bg='white')
+        lbl_Alert.pack()
+        space.pack()
+        btn_enviar.pack()
 
+class CadastroVacina(tk.Frame):
+    def __init__(self,parent,controller):
+        tk.Frame.__init__(self, parent)
+        
+        #Abrindo Imagem
+        photo = Image.open("backgroundMenu.jpg")
+        # Arrumando Tamanho
+        resize = photo.resize((1030,600), Image.ANTIALIAS)
+        # Criando a imagem
+        render = ImageTk.PhotoImage(resize)
+        # Inserindo a imagem no label
+        label = ttk.Label(self, image=render)
+        # Setando imagem do label com imagem criada
+        label.image = render
+        # Colocando label no frame
+        label.pack()
+        # Centralizando
+        label.place(relx=0,rely=0)
+
+        btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
+        btn_voltar.place(x=25,y=25)
+
+        lbl_nome = tk.Label(self, width = 30, text="Nome:", font=("Italic", 16))
+        lbl_aplicacao = tk.Label(self, width = 30, text="Aplicação:", font=("Italic", 16))
+        lbl_estado = tk.Label(self, width = 30, text="Estado:", font=("Italic", 16))
+        lbl_proxima = tk.Label(self, width = 30, text="Proxima vacina:", font=("Italic", 16))
+
+        ent_nome = tk.Entry(self, width = 40, relief="solid",bg='white')
+        ent_aplicacao = tk.Entry(self, width = 40, relief="solid",bg='white')
+        ent_estado = tk.Entry(self, width = 40, relief="solid",bg='white')
+        ent_proxima = tk.Entry(self, width = 40, relief="solid",bg='white')
+        
+        cad = tk.Button(self, width=15, text="Cadastrar Vacina", command = lambda:self.cadastra(ent_nome, ent_especie, ent_peso, ent_sexo,ent_porte,ent_nascimento,ent_raca), font=("Italic", 16), relief="solid",bg='white')
+
+        lbl_nome.pack()
+        ent_nome.pack()
+        lbl_aplicacao.pack()
+        ent_aplicacao.pack()
+        lbl_estado.pack()
+        ent_estado.pack()
+        lbl_proxima.pack()
+        ent_proxima.pack()
+        cad.place(x=300,y=450)
+
+
+    def cadastra(self, nome, aplicacao, estado, proxima):
+        data = [] 
+        data.append(str(nome.get()))
+        data.append(str(aplicacao.get()))
+        data.append(str(estado.get()))
+        data.append(str(proxima.get()))
+        resp = False
+
+        cad=tk.Tk()
+        self.relat() 
+        if data[0] == "" or data[0]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, seu nome não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[1] == "" or data[1]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, aplicação não foi inserida.", font=("Italic", 13))
+            resp = True
+        elif data[2] == "" or data[2]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, estado não foi inserido.", font=("Italic", 13))
+            resp = True
+        elif data[3] == "" or data[3]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto, proxima vacina não foi inserida.", font=("Italic", 13))
+            resp = True
+        # pois e, eu consulto, la e baixo tem a função que te falei, eu chamo ela aqui em ciam
+        elif vetPet.tokenjson["pet_id"] == "" or vetPet.tokenjson["pet_id"]==" ":
+            lbl_Alert = tk.Label(cad, width = 50, text="Ocorreu um imprevisto. O id do pet esta corrompido.", font=("Italic", 13))
+            resp = True
+        elif resp==False: 
+            tokenReg=post("http://127.0.0.1:5000/api/pet",json={"nome": data[0],"aplicação": data[1],"estado":data[2], "proxima":data[3], "pet_id":vetPet.tokenpetjson["pet_id"]}, headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+            print(tokenReg.text)
+            lbl_Alert = tk.Label(cad, width = 50, text="Cadastro de vacina realizado!", font=("Italic", 14))    
+
+        
+        space = tk.Canvas(self, width = 40, height=10)
+        btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 14), relief="solid",bg='white')
+        lbl_Alert.pack()
+        space.pack()
+        btn_enviar.pack()
+    #aqui chama e atualiza a variavel global 
+    def relat(self):
+        # Busca pets do user e transfere para um json 
+        vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+        vetPet.tokenpettxt=vetPet.tokenpet.text
+        vetPet.tokenpetjson=vetPet.tokenpet.json()
+        
 
 class BuscarPet(tk.Frame):
     def __init__(self,parent,controller):
@@ -462,8 +583,8 @@ class BuscarPet(tk.Frame):
             if pesquisa==True:
                 lbl_Alert = tk.Label(petSearch, width = 50, text="Tudo Certo, Pressione OK e Prosseguir para continuar", font=("Italic", 13))
                 btn_enviar = tk.Button(petSearch, width = 6, text="OK",command=petSearch.destroy, font=("Italic", 10), relief="solid",bg='white')
-                bt_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(DadosPet),font=("Italic", 14), relief="solid",background="white")
-                bt_prosseguir.place(x=440,y=350)
+                btn_prosseguir = tk.Button(self,width=10,text="Prosseguir",command=lambda:controller.show_frame(DadosPet),font=("Italic", 14), relief="solid",background="white")
+                btn_prosseguir.place(x=440,y=350)
                 lbl_Alert.pack()
                 btn_enviar.pack() 
             else:
@@ -493,12 +614,29 @@ class DadosPet(tk.Frame):
         # Centralizando
         label.place(relx=0,rely=0)
 
-        # lbl_nome = tk.Label(self, width = 20, text="nome", font=("Italic", 16))
-        # lbl_senha = tk.Label(self, width = 20, text="senha:", font=("Italic", 16))
+        mostrar_bnt = tk.Button(self,width=10,text="Mostrar",command=lambda:[self.printss(),mostrar_bnt.destroy],font=("Italic", 14), relief="solid",background="white")
+        mostrar_bnt.place(x=450,y=450)
+        
+        btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:[controller.show_frame(MenuUsuario)],font=("Italic", 14), relief="solid",background="white")
+        btn_voltar.place(x=25,y=25)    
 
+    def printss(self):
+        lbl_nome = tk.Label(self, width = 20, text=str(vetPet.infPet['nome']), font=("Italic", 16))
+        lbl_especie = tk.Label(self, width = 20, text=vetPet.infPet["especie"], font=("Italic", 16))
+        lbl_peso = tk.Label(self, width = 20, text=vetPet.infPet["peso"], font=("Italic", 16))
+        lbl_sexo = tk.Label(self, width = 20, text=vetPet.infPet["sexo"], font=("Italic", 16))
+        lbl_porte = tk.Label(self, width = 20, text=vetPet.infPet["porte"], font=("Italic", 16))
+        lbl_nascimento = tk.Label(self, width = 20, text=vetPet.infPet["nascimento"], font=("Italic", 16))
+        lbl_raca = tk.Label(self, width = 20, text=vetPet.infPet["raca"], font=("Italic", 16))
 
-        btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
-        btn_voltar.place(x=25,y=25)       
+        lbl_nome.pack()
+        lbl_especie.pack()
+        lbl_peso.pack()
+        lbl_sexo.pack()
+        lbl_porte.pack()
+        lbl_nascimento.pack()
+        lbl_raca.pack()
+           
 
 class BuscarClinica(tk.Frame):
     def __init__(self,parent,controller):
@@ -509,24 +647,59 @@ class BuscarClinica(tk.Frame):
         
         pass
 
+# Pre ok
 class Relatorio(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self, parent)
+        #Abrindo Imagem
+        photo = Image.open("backgroundMenu.jpg")
+        # Arrumando Tamanho
+        resize = photo.resize((1030,600), Image.ANTIALIAS)
+        # Criando a imagem
+        render = ImageTk.PhotoImage(resize)
+        # Inserindo a imagem no label
+        label = ttk.Label(self, image=render)
+        # Setando imagem do label com imagem criada
+        label.image = render
+        # Colocando label no frame
+        label.pack()
+        # Centralizando
+        label.place(relx=0,rely=0)
+
+        btn_Relatorio = tk.Button(self,width=10,text="Gerar",command=lambda:self.relat(controller),font=("Italic", 14), relief="solid",background="white")
+        btn_Relatorio.place(x=500, y=450,anchor="center")
+
 
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
-        
 
+    def relat(self,controller):
         # Busca pets do user e transfere para um json 
         vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
         vetPet.tokenpettxt=vetPet.tokenpet.text
         vetPet.tokenpetjson=vetPet.tokenpet.json()
+        print(vetPet.tokenpettxt)
+        print(vetPet.tokenpetjson)
 
+        # Criando objeto chamado cad no qual abre uma janela e depois de concluido exige que usaurio conclua
 
-        arquivo = open("relatorio.txt", "a")
-        
-        arquivo.write(vetPet.tokenjson)
-        pass
+        if not vetPet.tokenpetjson==[]:
+            try:
+                arquivo = open('relatorio.txt', 'w')
+                arquivo.writelines(vetPet.tokenpettxt)
+            except FileNotFoundError:
+                arquivo = open('relatorio.txt', 'w')
+                arquivo.writelines(u'Relatorio gerado\n')
+                arquivo.writelines(vetPet.tokenpettxt)
+
+            arquivo.close()
+        else:
+            cad=tk.Tk()
+            lbl_Alert = tk.Label(cad, width = 50, text="Não ha pets para gerar relatorio", font=("Italic", 13))
+            btn_enviar = tk.Button(cad, width = 6, text="OK",command=cad.destroy, font=("Italic", 10), relief="solid",bg='white')
+            lbl_Alert.pack()
+            btn_enviar.pack()
+    
 
 class MostrarPets(tk.Frame):
     def __init__(self,parent,controller):
@@ -534,6 +707,38 @@ class MostrarPets(tk.Frame):
 
         btn_voltar = tk.Button(self,width=10,text="Voltar",command=lambda:controller.show_frame(MenuUsuario),font=("Italic", 14), relief="solid",background="white")
         btn_voltar.place(x=25,y=25)
+        
+        # bf = ttk.Frame(self)
+
+        # sf = ttk.Frame(self)
+        # cols = [("nome", 50), ("especie", 50), ("peso", 50), ("sexo", 50), ("nascimento", 50), ("raca", 50)]
+        # self.listTree = ttk.Treeview(sf, columns=[col for col, _ in cols], height=10, show="headings")
+        # vsb = ttk.Scrollbar(orient="vertical", command=self.listTree.yview)
+        # self.listTree.configure(yscrollcommand=vsb.set)
+        # self.listTree.grid(column=1, row=0, sticky=tk.NSEW, in_=sf)
+        # vsb.grid(column=0, row=0, sticky=tk.NS, in_=sf)
+        # for col, colwidth in cols:
+        #     self.listTree.heading(col, text=col.title())
+        #     self.listTree.column(col, width=colwidth)
+        # sf.grid_columnconfigure(0, weight=1)
+        # sf.grid_rowconfigure(0, weight=1)
+        # sf.pack(side=tk.LEFT, padx=4) 
+
+        # quadro = ttk.Treeview(quadroGrid, columns=('nome', 'especie', 'peso', 'sexo', 'porte', 'nascimento', 'raca'), show='headings')
+        # quadro.column('nome', minwidth=0, width=20)        
+        # quadro.column('especie', minwidth=0, width=20)
+        # quadro.column('peso', minwidth=0, width=20)
+        # quadro.column('sexo', minwidth=0, width=20)        
+        # quadro.column('porte', minwidth=0, width=20)
+        # quadro.column('nascimento', minwidth=0, width=20)
+        # quadro.column('raca', minwidth=0, width=20)
+
+        # vetPet.tokenpet=get("http://127.0.0.1:5000/api/pet",headers={"Authorization":"JWT {}".format(vetPet.tokenjson)})
+        # vetPet.tokenpettxt=vetPet.tokenpet.text
+        # vetPet.tokenpetjson=vetPet.tokenpet.json()
+
+        # quadro.pack()
+        # popular()
         pass
 
 
